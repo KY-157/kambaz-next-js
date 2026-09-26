@@ -35,7 +35,7 @@ export default function HeadingTags() {
             </div>
 
             <div id="wd-your-heading">
-                <h4>Kelly</h4>
+                <h4>Kelly Yuzichuk</h4>
                 I am a part-time masters of cybersecurity student. 
                 I have a polydactyl cat named{" "} <span id="wd-your-span">Toby</span> and
                 spend my free time making ceramics.
