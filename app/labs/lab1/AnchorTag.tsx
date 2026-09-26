@@ -17,12 +17,12 @@ export default function AnchorTag() {
             </a>
             <br />
             <a 
-                href="https://github.com/jannunzi" 
+                href="https://github.com/KY-157" 
                 id="wd-your-github"
                 target="_blank"
                 rel="noreferrer"
             >
-                Kelly's GitHub
+                Kelly Yuzichuk's GitHub
             </a>
             <br />
             <a
