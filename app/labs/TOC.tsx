@@ -27,11 +27,16 @@ export default function TOC() {
             </Link>
         </li>
         <li>
-          <Link id="wd-toc-book-link" href="/book/ch1">Chapter 1</Link>
+            <Link id="wd-toc-book-link" href="/book/ch1">Chapter 1</Link>
+        </li>
+        <li>
+            <Link id="wd-github" href="https://github.com/KY-157/kambaz-next-js">
+                Kelly Ann Yuzichuk's GitHub
+            </Link>
         </li>
         
       </ul>
-      <h4>Kelly Y</h4>
+      <h4>Kelly Ann Yuzichuk</h4>
     </div>
   );
 }

@@ -22,6 +22,11 @@ export default function Labs() {
         <li>
             <Link href="/">Kambaz</Link>
         </li>
+        <li>
+            <Link href="https://github.com/KY-157/kambaz-next-js">
+                Kelly Ann Yuzichuk's GitHub
+            </Link>
+        </li>
       </ul>
     </div>
   );
