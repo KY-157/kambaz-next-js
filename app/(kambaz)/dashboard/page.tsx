@@ -5,7 +5,10 @@ export default function Dashboard() {
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
             <h2 id="wd-dashboard-published">Published Courses (3)</h2> <hr />
-            <div id="wd-dashboard-courses">
+            <div 
+                id="wd-dashboard-courses"
+                className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
+            >
                 <CourseCard
                     id="6200"
                     title="CY6200 IT Security Gov"
@@ -23,6 +26,12 @@ export default function Dashboard() {
                     title="1234 Risk Management"
                     subtitle="Security Risk Management and Assessment"
                     image="/images/CY5200.jpg"
+                />
+                <CourseCard
+                    id="CS9999"
+                    title="CS9999 Sample Course"
+                    subtitle="Assistant-generated sample — not my course"
+                    image="/images/reactjs.jpg"
                 />
             </div>
         </div>
