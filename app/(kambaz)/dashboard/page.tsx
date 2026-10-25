@@ -1,38 +1,19 @@
 import CourseCard from "./CourseCard";
+import * as db from "../database";
 
 export default function Dashboard() {
+    const courses = db.courses;
     return (
         <div id="wd-dashboard">
             <h1 id="wd-dashboard-title">Dashboard</h1> <hr />
-            <h2 id="wd-dashboard-published">Published Courses (3)</h2> <hr />
+            <h2 id="wd-dashboard-published">Published Courses ({courses.length})</h2> <hr />
             <div 
                 id="wd-dashboard-courses"
                 className="grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
             >
-                <CourseCard
-                    id="6200"
-                    title="CY6200 IT Security Gov"
-                    subtitle="Special Topics in IT Security Governance, Risk, and Compliance"
-                    image="/images/CY6200.jpg"
-                />
-                <CourseCard
-                    id="5610"
-                    title="CS5610 Web Dev"
-                    subtitle="Web Development using Node JS"
-                    image="/images/CS5610.jpg"
-                />
-                <CourseCard
-                    id="1234"
-                    title="1234 Risk Management"
-                    subtitle="Security Risk Management and Assessment"
-                    image="/images/CY5200.jpg"
-                />
-                <CourseCard
-                    id="CS9999"
-                    title="CS9999 Sample Course"
-                    subtitle="Assistant-generated sample — not my course"
-                    image="/images/reactjs.jpg"
-                />
+                {courses.map((course) => (
+                    <CourseCard key={course._id} {...course} />
+                ))}
             </div>
         </div>
     );
