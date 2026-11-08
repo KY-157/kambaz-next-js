@@ -1,14 +1,18 @@
+"use client";
+
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import AssignmentItem from "./AssignmentItem";
-import * as db from "../../../database";
+import { useAssignmentsStore } from "@/app/(kambaz)/store/assignmentsStore";
+import { useAccountContext } from "../../../account/AccountContext";
 
-export default async function Assignments({
-    params,
-}: {
-    params: Promise<{ cid: string }>;
-}) {
-    const { cid } = await params;
-    const assignments = db.assignments.filter(
+export default function Assignments() {
+    const { cid } = useParams<{ cid: string }>();
+    const allAssignments = useAssignmentsStore((state) => state.assignments);
+    const { currentUser } = useAccountContext();
+    const isFaculty = currentUser?.role === "FACULTY";
+    const assignments = allAssignments.filter(
         (assignment) => assignment.course === cid,
     );
     return (
@@ -22,6 +26,7 @@ export default async function Assignments({
                         className="rounded border py-1.5 pr-3 pl-9 text-sm"
                     />
                 </div>
+                {isFaculty && (
                 <div className="flex gap-2">
                     <button
                         id="wd-add-assignment-group"
@@ -30,14 +35,15 @@ export default async function Assignments({
                     >
                         <FaPlus /> Group
                     </button>
-                    <button
+                    <Link
                         id="wd-add-assignment"
-                        type="button"
-                        className="inline-flex items-center gap-1 rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"
+                        href={`/courses/${cid}/assignments/new`}
+                        className="inline-flex items-center gap-1 rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white no-underline"
                     >
                         <FaPlus /> Assignment
-                    </button>
+                    </Link>
                 </div>
+                )}
             </div>
             <h3 
                 id="wd-assignments-title"
@@ -53,6 +59,7 @@ export default async function Assignments({
                     <AssignmentItem
                         key={assignment._id}
                         cid={cid}
+                        canEdit={isFaculty}
                         aid={assignment._id}
                         title={assignment.title}
                         details={`Multiple Modules | Not available until ${assignment.available} | Due ${assignment.due} | ${assignment.points} pts`}
