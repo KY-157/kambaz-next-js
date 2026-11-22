@@ -1,20 +1,33 @@
 "use client";
 
+import * as client from "../../client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useEffect } from "react";
 import { FaPlus, FaSearch } from "react-icons/fa";
 import AssignmentItem from "./AssignmentItem";
 import { useAssignmentsStore } from "@/app/(kambaz)/store/assignmentsStore";
 import { useAccountContext } from "../../../account/AccountContext";
 
 export default function Assignments() {
-    const { cid } = useParams<{ cid: string }>();
-    const allAssignments = useAssignmentsStore((state) => state.assignments);
+    const setAssignments = useAssignmentsStore((state) => state.setAssignments);
+    const deleteAssignment = useAssignmentsStore((state) => state.deleteAssignment);
+    const { cid } = useParams();
+    const courseId = cid as string;
+    const assignments = useAssignmentsStore((state) => state.assignments);
     const { currentUser } = useAccountContext();
     const isFaculty = currentUser?.role === "FACULTY";
-    const assignments = allAssignments.filter(
-        (assignment) => assignment.course === cid,
-    );
+    
+    useEffect(() => {
+        const load = async () => {
+            setAssignments(await client.findAssignmentsForCourse(courseId));
+        };
+        load();
+    }, [courseId, setAssignments]);
+    const onDeleteAssignment = async (assignmentId: string) => {
+        await client.deleteAssignment(assignmentId);
+        deleteAssignment(assignmentId);
+    };
     return (
         <div id="wd-assignments">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
@@ -58,10 +71,11 @@ export default function Assignments() {
                 {assignments.map((assignment) => (
                     <AssignmentItem
                         key={assignment._id}
-                        cid={cid}
+                        cid={courseId}
                         canEdit={isFaculty}
                         aid={assignment._id}
                         title={assignment.title}
+                        onDeleteAssignment={onDeleteAssignment}
                         details={`Multiple Modules | Not available until ${assignment.available} | Due ${assignment.due} | ${assignment.points} pts`}
                     />
                 ))}

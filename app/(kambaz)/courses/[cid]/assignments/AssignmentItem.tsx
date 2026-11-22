@@ -11,14 +11,15 @@ export default function AssignmentItem({
     aid,
     title,
     details,
+    onDeleteAssignment,
 }: {
     cid: string;
     canEdit: boolean;
     aid: string;
     title: string;
     details: string;
+    onDeleteAssignment: (assignmentId: string) => void;
 }) {
-    const deleteAssignment = useAssignmentsStore((state) => state.deleteAssignment);
     const [confirming, setConfirming] = useState(false);
 
     return (
@@ -67,7 +68,7 @@ export default function AssignmentItem({
                                 type="button"
                                 id="wd-delete-yes"
                                 onClick={() => {
-                                    deleteAssignment(aid);
+                                    onDeleteAssignment(aid);
                                     setConfirming(false);
                                 }}
                                 className="rounded bg-red-600 px-3 py-1.5 text-sm font-medium text-white"

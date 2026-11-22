@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import * as client from "../../client";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useAssignmentsStore } from "../../../store/assignmentsStore";
 import { useAccountContext } from "../../../account/AccountContext";
 
@@ -12,11 +12,13 @@ const inputClass =
 
 export default function AssignmentEditor() {
     const { cid, aid } = useParams();
+    const courseId = cid as string;
     const router = useRouter();
     const isNew = aid === "new";
     const existing = useAssignmentsStore((state) =>
         state.assignments.find((a) => a._id === aid && a.course === cid),
     );
+    const setAssignments = useAssignmentsStore((state) => state.setAssignments);
     const addAssignment = useAssignmentsStore((state) => state.addAssignment);
     const updateAssignment = useAssignmentsStore((state) => state.updateAssignment);
 
@@ -27,35 +29,44 @@ export default function AssignmentEditor() {
     const [available, setAvailable] = useState(existing?.available ?? "");
     const [until, setUntil] = useState(existing?.until ?? "");
 
-    const back = `/courses/${cid}/assignments`;
+    useEffect(() => {
+        const load = async () => {
+            setAssignments(await client.findAssignmentsForCourse(courseId));
+        };
+        load();
+    }, [courseId, setAssignments]);
 
+    useEffect(() => {
+        if (!existing) return;
+        setTitle(existing.title ?? "");
+        setDescription(existing.description ?? "");
+        setPoints(String(existing.points ?? 100));
+        setDue(existing.due ?? "");
+        setAvailable(existing.available ?? "");
+        setUntil(existing.until ?? "");
+    }, [existing?._id]);
+
+    const back = `/courses/${cid}/assignments`;
     const { currentUser } = useAccountContext();
     const isFaculty = currentUser?.role === "FACULTY";
 
-    const save = () => {
+    const save = async () => {
         if (!isFaculty) return;
-        const pts = Number(points) || 0;
+        const fields = {
+            title: title.trim() || "New Assignment",
+            course: courseId,
+            description,
+            points: Number(points) || 0,
+            due,
+            available,
+            until,
+        };
         if (isNew) {
-            addAssignment({
-                title: title.trim() || "New Assignment",
-                course: String(cid),
-                description,
-                points: pts,
-                due,
-                available,
-                until,
-            });
+            const created = await client.createAssignmentForCourse(courseId, fields);
+            addAssignment(created);
         } else if (existing) {
-            updateAssignment({
-                ...existing,
-                course: String(cid),
-                title,
-                description,
-                points: pts,
-                due,
-                available,
-                until,
-            });
+            const saved = await client.updateAssignment({ ...existing, ...fields });
+            updateAssignment(saved);
         }
         router.push(back);
     };
