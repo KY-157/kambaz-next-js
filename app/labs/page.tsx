@@ -24,7 +24,12 @@ export default function Labs() {
         </li>
         <li>
             <Link href="https://github.com/KY-157/kambaz-next-js">
-                Kelly Ann Yuzichuk's GitHub
+                Kelly Ann Yuzichuk's GitHub React Poject
+            </Link>
+        </li>
+        <li>
+            <Link href="https://github.com/KY-157/webdev-server">
+                Kelly Ann Yuzichuk's GitHub Node Server 
             </Link>
         </li>
         <li>
