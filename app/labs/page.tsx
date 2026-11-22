@@ -27,6 +27,11 @@ export default function Labs() {
                 Kelly Ann Yuzichuk's GitHub
             </Link>
         </li>
+        <li>
+            <Link href="https://webdev-server-wnlr.onrender.com/">
+                Root URL of Deployed Server on Render
+            </Link>
+        </li>
       </ul>
     </div>
   );
